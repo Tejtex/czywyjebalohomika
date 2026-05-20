@@ -1,7 +1,13 @@
 {
-  "status": "unknown",
-  "last_checked": null,
-  "response_time_ms": null,
-  "uptime_percentage": null,
-  "history": []
+  "status": "up",
+  "last_checked": "2026-05-20T12:14:49Z",
+  "response_time_ms": 446,
+  "uptime_percentage": 100.0,
+  "history": [
+    {
+      "timestamp": "2026-05-20T12:14:49Z",
+      "status": "up",
+      "response_time_ms": 446
+    }
+  ]
 }
