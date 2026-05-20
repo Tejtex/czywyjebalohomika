@@ -1,0 +1,80 @@
+name: Check szkopul status
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check szkopul.edu.pl and update status.json
+        run: |
+          python3 - <<'EOF'
+          import urllib.request
+          import urllib.error
+          import json
+          import time
+
+          url = "https://szkopul.edu.pl"
+          timeout = 10
+          status = "down"
+          elapsed = None
+          start = time.time()
+
+          try:
+              req = urllib.request.Request(url, headers={"User-Agent": "szkopul-status-checker/1.0"})
+              resp = urllib.request.urlopen(req, timeout=timeout)
+              elapsed = int((time.time() - start) * 1000)
+              status = "up"
+          except urllib.error.HTTPError as e:
+              elapsed = int((time.time() - start) * 1000)
+              status = "up" if e.code < 500 else "down"
+          except Exception:
+              pass
+
+          try:
+              with open("status.json", "r") as f:
+                  data = json.load(f)
+          except Exception:
+              data = {"status": "unknown", "last_checked": None, "response_time_ms": None, "uptime_percentage": None, "history": []}
+
+          history = data.get("history", [])
+          history.append({
+              "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+              "status": status,
+              "response_time_ms": elapsed,
+          })
+          history = history[-288:]  # keep last 24h (288 * 5min)
+
+          total = len(history)
+          up_count = sum(1 for h in history if h["status"] == "up")
+          uptime_pct = round(up_count / total * 100, 2) if total > 0 else None
+
+          data = {
+              "status": status,
+              "last_checked": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+              "response_time_ms": elapsed,
+              "uptime_percentage": uptime_pct,
+              "history": history,
+          }
+
+          with open("status.json", "w") as f:
+              json.dump(data, f, indent=2)
+
+          print(f"status={status} response_time={elapsed}ms uptime={uptime_pct}%")
+          EOF
+
+      - name: Commit updated status.json
+        run: |
+          git config user.name "status-bot"
+          git config user.email "status-bot@users.noreply.github.com"
+          git add status.json
+          git diff --staged --quiet || git commit -m "chore: update status [skip ci]"
+          git push

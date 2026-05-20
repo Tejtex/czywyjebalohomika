@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>czy wyjebało homika?</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>czy wyjebało homika?</h1>
+    <p class="subtitle">monitoring szkopul.edu.pl</p>
+
+    <div id="status-card" class="status-card">
+      <span id="status-dot" class="dot"></span>
+      <span id="status-text">sprawdzam...</span>
+    </div>
+
+    <img id="hamster" src="hamster.png" alt="płaski chomik" class="hamster hidden">
+
+    <div class="stats">
+      <div class="stat">
+        <div id="uptime" class="stat-value">—</div>
+        <div class="stat-label">dostępność (24h)</div>
+      </div>
+      <div class="stat">
+        <div id="response-time" class="stat-value">—</div>
+        <div class="stat-label">czas odpowiedzi</div>
+      </div>
+      <div class="stat">
+        <div id="last-checked" class="stat-value">—</div>
+        <div class="stat-label">ostatnie sprawdzenie</div>
+      </div>
+    </div>
+
+    <div class="history-label">ostatnie 24h <span class="history-hint">(każdy blok = 5 min)</span></div>
+    <div id="history" class="history"></div>
+
+    <footer>
+      sprawdzane co 5 minut &mdash;
+      <a href="https://szkopul.edu.pl" target="_blank" rel="noopener">szkopul.edu.pl</a>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
