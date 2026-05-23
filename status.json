@@ -1,7 +1,7 @@
 {
   "status": "up",
-  "last_checked": "2026-05-23T16:32:16Z",
-  "response_time_ms": 754,
+  "last_checked": "2026-05-23T17:35:10Z",
+  "response_time_ms": 546,
   "uptime_percentage": 100.0,
   "history": [
     {
@@ -193,6 +193,11 @@
       "timestamp": "2026-05-23T16:32:16Z",
       "status": "up",
       "response_time_ms": 754
+    },
+    {
+      "timestamp": "2026-05-23T17:35:10Z",
+      "status": "up",
+      "response_time_ms": 546
     }
   ]
 }
